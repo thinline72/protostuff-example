@@ -13,20 +13,19 @@
 
 package in.srid.serializer;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
-
 import com.google.common.base.Stopwatch;
-
 import in.srid.serializer.fasterxml.FasterxmlSerializer;
+import in.srid.serializer.hessian.HessianSerializer;
 import in.srid.serializer.jackson.JacksonSerializer;
 import in.srid.serializer.jdk.JdkObjectSerializer;
 import in.srid.serializer.kryo.KryoSerializer;
 import in.srid.serializer.model.ImmutableModel;
 import in.srid.serializer.protobuf.ProtobufSerializer;
 import in.srid.serializer.protostuff.ProtostuffSerializer;
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class SerializerBenchmarkTest {
 
@@ -38,6 +37,7 @@ public class SerializerBenchmarkTest {
     private static final ProtobufSerializer protobuf = new ProtobufSerializer();
     private static final ProtostuffSerializer protostuff = new ProtostuffSerializer();
     private static final KryoSerializer kryo = new KryoSerializer();
+    private static final HessianSerializer hessian = new HessianSerializer();
 
     private final Stopwatch stopwatch = Stopwatch.createUnstarted();
 
@@ -47,7 +47,8 @@ public class SerializerBenchmarkTest {
         FASTERXML(fastxml, fastxml),
         PROTOBUF(protobuf, protobuf),
         PROTOSTUFF(protostuff, protostuff),
-        KRYO(kryo, kryo);
+        KRYO(kryo, kryo),
+        HESSIAN(hessian, hessian);
 
         private final Serializer serializer;
         private final Deserializer deserializer;

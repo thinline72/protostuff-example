@@ -18,6 +18,7 @@ package in.srid.serializer;
 
 import io.protostuff.LinkedBuffer;
 import io.protostuff.Schema;
+import io.protostuff.runtime.RuntimeSchema;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
@@ -31,7 +32,7 @@ public abstract class AbstractProtoSerializer implements Serializer, Deserialize
         final Class<T> clazz = (Class<T>) source.getClass();
         final LinkedBuffer buffer = LinkedBuffer.allocate( LinkedBuffer.DEFAULT_BUFFER_SIZE );
         try {
-            final Schema<T> schema = SchemaUtils.getSchema( clazz );
+            final Schema<T> schema = RuntimeSchema.getSchema(clazz);
             return serializeInternal( source, schema, buffer );
         }
         catch ( final Exception e ) {
@@ -46,8 +47,8 @@ public abstract class AbstractProtoSerializer implements Serializer, Deserialize
     public <T> T deserialize( final byte[] bytes , final Class<T> clazz ) {
         try {
             @SuppressWarnings( "unchecked" )
-            final T result = (T) objenesis.newInstance( clazz );
-            return deserializeInternal( bytes, result, SchemaUtils.getSchema( clazz ) );
+            final T result = objenesis.newInstance( clazz );
+            return deserializeInternal( bytes, result, RuntimeSchema.getSchema(clazz));
         }
         catch ( final Exception e ) {
             throw new IllegalStateException( e );
